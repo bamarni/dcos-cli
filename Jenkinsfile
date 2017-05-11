@@ -338,6 +338,8 @@ builders['linux-tests'] = testBuilder('linux', 'py35', '/workspace')({
                unset DCOS_ACS_TOKEN; \
                make test-binary'''
         }
+
+        sh 'bash dcos-cli/bin/install/test-install-binary-dcos-cli.sh "${DCOS_URL}"'
     }
 })
 
@@ -363,6 +365,8 @@ builders['mac-tests'] = testBuilder('mac', 'mac')({
                unset DCOS_ACS_TOKEN; \
                make test-binary'''
         }
+
+        sh 'bash dcos-cli/bin/install/test-install-binary-dcos-cli.sh "${DCOS_URL}"'
     }
 })
 
@@ -385,6 +389,8 @@ builders['windows-tests'] = testBuilder('windows', 'windows', 'C:\\windows\\work
                 unset DCOS_ACS_TOKEN; \
                 make test-binary"'''
         }
+
+        bat 'bash dcos-cli/bin/install/test-install-binary-dcos-cli.sh "%DCOS_URL%"'
     }
 })
 
