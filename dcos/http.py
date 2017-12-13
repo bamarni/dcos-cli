@@ -93,7 +93,7 @@ def _verify_ssl(url, verify=None, toml_config=None):
 def _request(method,
              url,
              is_success=_default_is_success,
-             timeout=DEFAULT_TIMEOUT,
+             timeout=-1,
              auth=None,
              verify=None,
              toml_config=None,
@@ -119,6 +119,18 @@ def _request(method,
     :type kwargs: dict
     :rtype: Response
     """
+
+    if toml_config is None:
+        toml_config = config.get_config()
+
+    # The default "-1" timeout allows to distinguish between 3 cases :
+    #   - an explicit None has been passed (means unlimited timeout)
+    #   - timeout > 0 (an explicit value has been passed)
+    #   - no value has been explicitly passed, in such cases it first looks up
+    #     for the config value, then fallbacks to the DEFAULT_TIMEOUT.
+    if timeout == -1:
+        timeout = config.get_config_val("core.timeout", toml_config)
+        timeout = timeout or DEFAULT_TIMEOUT
 
     if 'headers' not in kwargs:
         kwargs['headers'] = {'Accept': 'application/json'}
